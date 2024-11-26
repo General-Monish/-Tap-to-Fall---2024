@@ -11,7 +11,7 @@ public class SpawnManager : MonoBehaviour
     private Player player;
     private float startDelay = 2f;
     private float repeatRate = 2f;
-    private Vector3 spawnPos= new Vector3 (21,0,0);
+    private Vector3 spawnPos= new Vector3 (25,0,0);
     // Start is called before the first frame update
     void Start()
     {

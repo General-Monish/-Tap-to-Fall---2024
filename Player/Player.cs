@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField] ParticleSystem dirtParticle;
     [SerializeField] AudioClip jumpSound;
     [SerializeField] AudioClip deathSound;
+    [SerializeField] GameObject jumpBtn;
+    [SerializeField] GameObject RestartBtn;
 
     AudioSource playerAudio;
     Rigidbody rb;
@@ -23,17 +27,21 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Physics.gravity*=gravityModifier;
+        jumpBtn.SetActive(true);
+        RestartBtn.SetActive(false);
+
+        Jump();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Jump();
+        
     }
 
-    private void Jump()
+    public void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !isGameOver)
+        if (isOnGround && !isGameOver)
         {
             anim.SetTrigger("Jump_trig");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -58,6 +66,13 @@ public class Player : MonoBehaviour
             explosion.Play();
             dirtParticle.Stop();
             playerAudio.PlayOneShot(deathSound, 1f);
+            jumpBtn.SetActive(false);
+            RestartBtn.SetActive(true);
         }
+    }
+
+    public void RestartBtns()
+    {
+        SceneManager.LoadScene("JJ");
     }
 }
