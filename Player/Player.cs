@@ -1,42 +1,47 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float jumpForce = 100f;
-    [SerializeField] float gravityModifier;
-    [SerializeField] ParticleSystem explosion;
-    [SerializeField] ParticleSystem dirtParticle;
-    [SerializeField] AudioClip jumpSound;
-    [SerializeField] AudioClip deathSound;
-    [SerializeField] GameObject jumpBtn;
-    [SerializeField] GameObject RestartBtn;
+    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float gravityModifier = 2f;
+    [SerializeField] private ParticleSystem explosion;
+    [SerializeField] private ParticleSystem dirtParticle;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private GameObject jumpBtn;
+    [SerializeField] private GameObject restartBtn;
 
-    AudioSource playerAudio;
-    Rigidbody rb;
-    Animator anim;
-    public bool isOnGround;
-    public bool isGameOver;
-    // Start is called before the first frame update
+    private AudioSource playerAudio;
+    private Rigidbody rb;
+    private Animator anim;
+
+    public bool isOnGround = true;
+    public bool isGameOver = false;
+
+    private static bool gravityInitialized = false;
+
     void Start()
     {
         playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        Physics.gravity*=gravityModifier;
+
+        // Initialize gravity only once
+        if (!gravityInitialized)
+        {
+            Physics.gravity *= gravityModifier;
+            gravityInitialized = true;
+        }
+
+        // Initialize UI buttons
         jumpBtn.SetActive(true);
-        RestartBtn.SetActive(false);
+        restartBtn.SetActive(false);
 
-        Jump();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Reset game state
+        ResetPlayerState();
     }
 
     public void Jump()
@@ -46,8 +51,9 @@ public class Player : MonoBehaviour
             anim.SetTrigger("Jump_trig");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
-            dirtParticle.Stop();
-            playerAudio.PlayOneShot(jumpSound, 1f);
+
+            if (dirtParticle != null) dirtParticle.Stop();
+            if (playerAudio != null) playerAudio.PlayOneShot(jumpSound, 1f);
         }
     }
 
@@ -56,23 +62,56 @@ public class Player : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isOnGround = true;
-            dirtParticle.Play();
-        } else if (collision.collider.CompareTag("OBS"))
+            if (dirtParticle != null) dirtParticle.Play();
+        }
+        else if (collision.collider.CompareTag("OBS"))
         {
             isGameOver = true;
-            Debug.Log("GameOver");
+            Debug.Log("Game Over");
+
             anim.SetBool("Death_b", true);
             anim.SetInteger("DeathType_int", 1);
-            explosion.Play();
-            dirtParticle.Stop();
-            playerAudio.PlayOneShot(deathSound, 1f);
+
+            if (explosion != null) explosion.Play();
+            if (dirtParticle != null) dirtParticle.Stop();
+            if (playerAudio != null) playerAudio.PlayOneShot(deathSound, 1f);
+
             jumpBtn.SetActive(false);
-            RestartBtn.SetActive(true);
+            restartBtn.SetActive(true);
         }
     }
 
     public void RestartBtns()
     {
-        SceneManager.LoadScene("JJ");
+        // Reset Rigidbody velocity and other states before reloading
+        ResetPlayerState();
+
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void ResetPlayerState()
+    {
+        // Reset critical state variables
+        isOnGround = true;
+        isGameOver = false;
+
+        // Reset Rigidbody velocity
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        // Reset animations
+        if (anim != null)
+        {
+            anim.SetBool("Death_b", false);
+            anim.SetInteger("DeathType_int", 0);
+        }
+
+        // Reset particle systems
+        if (dirtParticle != null) dirtParticle.Play();
+        if (explosion != null) explosion.Stop();
     }
 }
