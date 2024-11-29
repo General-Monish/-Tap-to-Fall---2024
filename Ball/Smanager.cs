@@ -7,8 +7,6 @@ public class Smanager : MonoBehaviour
     [SerializeField] GameObject enemeyPrefab;
     [SerializeField] GameObject powerupPrefab;
     float spawnPos = 9f;
-    float startDelay=1f;
-    float spawnInterval=2f;
     int enemyCount;
     int waveNum=2;
     // Start is called before the first frame update

@@ -1,27 +1,34 @@
 using System.Collections;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public Joystick joystick;    // Reference to the Joystick script
-    public float moveSpeed = 5f; // Speed for player movement
+    public float moveSpeed = 7f; // Speed for player movement
     public GameObject focalPoint;
     public GameObject powerupIndicator;
     public AudioClip enemycollideSound;
     public AudioClip powerupSound;
     bool hasPowerUp;
-    float powerStrength = 15f;
+    float powerStrength = 20f;
     private Rigidbody rb;
     AudioSource playerAudio;
+    public GameObject restartBtn;
 
     void Start()
     {
+        restartBtn.SetActive(false);
         playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
     {
+        if (transform.position.y < -10)
+        {
+
+            restartBtn.SetActive(true);
+        }
         powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);
         // Get input from the joystick
         float horizontal = joystick.inputDirection.x;
@@ -58,5 +65,10 @@ public class PlayerController : MonoBehaviour
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
             enemyRB.AddForce(awayFromPlayer*powerStrength,ForceMode.Impulse);
         }
+    }
+
+    public void RestartBtn()
+    {
+        SceneManager.LoadScene("Ball");
     }
 }

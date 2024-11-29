@@ -24,7 +24,7 @@ public class Scenemanager : MonoBehaviour
 
     public void PlayButtons()
     {
-        SceneManager.LoadScene("JJ");
+        SceneManager.LoadScene("Ball");
     }
 
     public void QuitBtn()
