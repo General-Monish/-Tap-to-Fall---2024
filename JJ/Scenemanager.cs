@@ -24,7 +24,7 @@ public class Scenemanager : MonoBehaviour
 
     public void PlayButtons()
     {
-        SceneManager.LoadScene("Ball");
+        SceneManager.LoadScene("Clicky");
     }
 
     public void QuitBtn()
