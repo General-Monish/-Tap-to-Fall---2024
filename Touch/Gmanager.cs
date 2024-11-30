@@ -14,6 +14,9 @@ public class Gmanager : MonoBehaviour
     public TextMeshProUGUI gameoverText;
     public bool isGameActive;
     public Button restartBtnn;
+    public Button MMBtnn;
+
+
     public GameObject title;
     // Start is called before the first frame update
     void Start()
@@ -59,10 +62,16 @@ public class Gmanager : MonoBehaviour
         isGameActive = false;
         gameoverText.gameObject.SetActive(true);
         restartBtnn.gameObject.SetActive(true);
+        MMBtnn.gameObject.SetActive(true);
     }
 
     public void RestartBtn()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    } 
+    
+    public void MMtBtn()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

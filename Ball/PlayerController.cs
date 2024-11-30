@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     AudioSource playerAudio;
     public GameObject restartBtn;
+    public GameObject MMBtn;
 
     void Start()
     {
+        MMBtn.SetActive(false);
         restartBtn.SetActive(false);
         playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < -10)
         {
-
+            MMBtn.SetActive(true);
             restartBtn.SetActive(true);
         }
         powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);
@@ -70,5 +72,9 @@ public class PlayerController : MonoBehaviour
     public void RestartBtn()
     {
         SceneManager.LoadScene("Ball");
+    }
+    public void MainMenuBtn()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

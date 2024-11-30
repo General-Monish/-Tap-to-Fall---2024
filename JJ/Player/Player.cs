@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private GameObject jumpBtn;
     [SerializeField] private GameObject restartBtn;
+    [SerializeField] private GameObject MMBtn;
 
     private AudioSource playerAudio;
     private Rigidbody rb;
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour
         // Initialize UI buttons
         jumpBtn.SetActive(true);
         restartBtn.SetActive(false);
+        MMBtn.SetActive(false);
 
         // Reset game state
         ResetPlayerState();
@@ -78,6 +80,7 @@ public class Player : MonoBehaviour
 
             jumpBtn.SetActive(false);
             restartBtn.SetActive(true);
+            MMBtn.SetActive(true);
         }
     }
 
@@ -113,5 +116,10 @@ public class Player : MonoBehaviour
         // Reset particle systems
         if (dirtParticle != null) dirtParticle.Play();
         if (explosion != null) explosion.Stop();
+    }
+
+    public void MMbtnn()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
