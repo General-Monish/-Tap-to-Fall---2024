@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public Joystick joystick;    // Reference to the Joystick script
     public float moveSpeed = 7f; // Speed for player movement
     public GameObject focalPoint;
-    public GameObject powerupIndicator;
+    /*public GameObject powerupIndicator;*/
     public AudioClip enemycollideSound;
     public AudioClip powerupSound;
     bool hasPowerUp;
@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject boomPrefab;
     public GameObject hitPrefab;
+    public GameObject powerGlowupPrefab;
 
     void Start()
     {
@@ -34,7 +35,8 @@ public class PlayerController : MonoBehaviour
             MMBtn.SetActive(true);
             restartBtn.SetActive(true);
         }
-        powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);
+        /*powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);*/
+        powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,-0.44f,0);
         // Get input from the joystick
         float horizontal = joystick.inputDirection.x;
         float vertical = joystick.inputDirection.y;
@@ -49,7 +51,8 @@ public class PlayerController : MonoBehaviour
         {
             playerAudio.PlayOneShot(powerupSound);
             hasPowerUp = true;
-            powerupIndicator.SetActive(true);
+            /*powerupIndicator.SetActive(true);*/
+            powerGlowupPrefab.SetActive(true);
             Destroy(other.gameObject);
             StartCoroutine(PowerupCountdown());
         }
@@ -59,7 +62,8 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(7);
         hasPowerUp = false;
-        powerupIndicator.SetActive(false);
+        /*powerupIndicator.SetActive(false);*/
+        powerGlowupPrefab.SetActive(false);
     }
     private void OnCollisionEnter(Collision collision)
     {
