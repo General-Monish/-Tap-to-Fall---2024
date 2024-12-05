@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     public GameObject restartBtn;
     public GameObject MMBtn;
 
+    public GameObject boomPrefab;
+    public GameObject hitPrefab;
+
     void Start()
     {
         MMBtn.SetActive(false);
@@ -62,6 +65,8 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.collider.CompareTag("enemy")&& hasPowerUp)
         {
+            Instantiate(boomPrefab, transform.position, boomPrefab.transform.rotation);
+            Instantiate(hitPrefab, transform.position, hitPrefab.transform.rotation);
             playerAudio.PlayOneShot(enemycollideSound);
             Rigidbody enemyRB=collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
