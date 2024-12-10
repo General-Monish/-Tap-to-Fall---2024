@@ -26,6 +26,7 @@ public class Smanager : MonoBehaviour
             SpawnEnemyWave(waveNum);
         }
     }
+    // nothing
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
