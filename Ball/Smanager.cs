@@ -11,7 +11,9 @@ public class Smanager : MonoBehaviour
     int enemyCount;
     int waveNum=2;
     public TextMeshProUGUI levelText;
+    public TextMeshProUGUI scoreText;
     int levelCount;
+    private int scoreCount=0;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,5 +54,16 @@ public class Smanager : MonoBehaviour
     private void DisplayLevelNumber()
     {
         levelText.text="Level: " + levelCount.ToString();
+    }
+
+    public void DisplayScore(int scorePoints)
+    {
+        scoreCount += scorePoints;
+        UpdateScoreUI();
+    }
+
+    private void UpdateScoreUI()
+    {
+        scoreText.text = "Score: " + scoreCount.ToString(); // Assume scoreText is a UI Text element
     }
 }
