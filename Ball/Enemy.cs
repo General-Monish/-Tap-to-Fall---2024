@@ -19,15 +19,17 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         
-        PowerUpForceInLookDirection();
+        MoveTowradsPlayer();
         OnDestroy();
         //yes 
     }
 
-    private void PowerUpForceInLookDirection()
+    private void MoveTowradsPlayer()
     {
         Vector3 lookDir = (player.transform.position - transform.position).normalized;
         rb.AddForce(lookDir * speed);
+        // boom 
+
     }
 
     private void OnDestroy()
