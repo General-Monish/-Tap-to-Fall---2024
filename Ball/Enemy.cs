@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
         Vector3 lookDir = (player.transform.position - transform.position).normalized;
         rb.AddForce(lookDir * speed);
         // boom 
+        // nothng
 
     }
 
