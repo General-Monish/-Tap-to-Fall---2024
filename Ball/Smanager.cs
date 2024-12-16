@@ -14,10 +14,14 @@ public class Smanager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     int levelCount;
     private int scoreCount=0;
+    public GameObject pauseBtn;
+    public GameObject pausePanel;
     // Start is called before the first frame update
     void Start()
     {
         levelCount = 0;
+        pauseBtn.SetActive(true);
+        pausePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -66,4 +70,49 @@ public class Smanager : MonoBehaviour
     {
         scoreText.text = "Score: " + scoreCount.ToString(); // Assume scoreText is a UI Text element
     }
+
+    public void PauseBtn()
+    {
+        Time.timeScale = 0.0f;
+        pauseBtn.SetActive(false);
+        pausePanel.SetActive(true);
+
+        // Disable physics-related components
+        Rigidbody[] allRigidbodies = FindObjectsOfType<Rigidbody>();
+        foreach (Rigidbody rb in allRigidbodies)
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        // Pause audio
+        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource audio in allAudioSources)
+        {
+            audio.Pause();
+        }
+    }
+
+    public void ResumeBtn()
+    {
+        Time.timeScale = 1.0f;
+        pausePanel.SetActive(false);
+        pauseBtn.SetActive(true);
+
+        // Enable physics-related components
+        Rigidbody[] allRigidbodies = FindObjectsOfType<Rigidbody>();
+        foreach (Rigidbody rb in allRigidbodies)
+        {
+            rb.isKinematic = false;
+        }
+
+        // Resume audio
+        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource audio in allAudioSources)
+        {
+            audio.UnPause();
+        }
+    }
+
 }

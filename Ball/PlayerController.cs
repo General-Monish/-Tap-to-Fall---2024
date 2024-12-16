@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     }
     public void MainMenuBtn()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("MainMenu");
     }
 }
