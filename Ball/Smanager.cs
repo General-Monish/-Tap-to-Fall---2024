@@ -115,4 +115,14 @@ public class Smanager : MonoBehaviour
         }
     }
 
+    public void MMbtn()
+    {
+        Loader.Load(Loader.Scene.MainMenu);
+        Time.timeScale = 1.0f;
+    }
+
+    public void RestartBtn()
+    {
+        Loader.Load(Loader.Scene.Ball);
+    }
 }

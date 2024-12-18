@@ -77,14 +77,4 @@ public class PlayerController : MonoBehaviour
             enemyRB.AddForce(awayFromPlayer*powerStrength,ForceMode.Impulse);
         }
     }
-
-    public void RestartBtn()
-    {
-        SceneManager.LoadScene("Ball");
-    }
-    public void MainMenuBtn()
-    {
-        Time.timeScale = 1.0f;
-        SceneManager.LoadScene("MainMenu");
-    }
 }
