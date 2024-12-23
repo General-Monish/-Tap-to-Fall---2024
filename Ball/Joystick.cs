@@ -18,7 +18,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         // Calculate the drag direction within the background bounds
         Vector2 position = RectTransformUtility.WorldToScreenPoint(null, background.position);
-        Vector2 radius = background.sizeDelta / 15;
+        Vector2 radius = background.sizeDelta / 20;
         inputDirection = (eventData.position - position) / radius;
 
         // Clamp the input direction to a circle
