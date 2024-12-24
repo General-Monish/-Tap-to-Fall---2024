@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
-    public Joystick joystick;    // Reference to the Joystick script
+      // Reference to the Joystick script
+      public Joystick joystick;
     public float moveSpeed = 7f; // Speed for player movement
     public GameObject focalPoint;
     /*public GameObject powerupIndicator;*/
@@ -38,11 +39,14 @@ public class PlayerController : MonoBehaviour
         /*powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);*/
         powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,-0.44f,0);
         // Get input from the joystick
+
+
         float horizontal = joystick.inputDirection.x;
         float vertical = joystick.inputDirection.y;
 
-        rb.AddForce(focalPoint.transform.right*moveSpeed* -horizontal*Time.deltaTime,ForceMode.Impulse);
-        rb.AddForce(focalPoint.transform.forward*moveSpeed* -vertical*Time.deltaTime,ForceMode.Impulse);
+        rb.AddForce(focalPoint.transform.right * moveSpeed * horizontal * Time.deltaTime, ForceMode.Impulse);
+        rb.AddForce(focalPoint.transform.forward * moveSpeed * vertical * Time.deltaTime, ForceMode.Impulse);
+
     }
 
     private void OnTriggerEnter(Collider other)
