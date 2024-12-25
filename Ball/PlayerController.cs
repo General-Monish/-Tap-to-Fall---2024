@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
       // Reference to the Joystick script
-      public Joystick joystick;
+      public jj joystick;
     public float moveSpeed = 7f; // Speed for player movement
     public GameObject focalPoint;
     /*public GameObject powerupIndicator;*/
@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     float powerStrength = 20f;
     private Rigidbody rb;
     AudioSource playerAudio;
+
     public GameObject restartBtn;
     public GameObject MMBtn;
 
