@@ -1,41 +1,39 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Joystick : MonoBehaviour, IDragHandler, IEndDragHandler
+public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    public RectTransform background; // Joystick background
-    public RectTransform handle;     // Joystick handle
-    public Vector2 inputDirection;   // Direction of joystick movement
+    public RectTransform background;
+    public RectTransform handle;
+    public CanvasGroup canvasGroup; // To control joystick visibility
+    public Vector2 inputDirection;
 
-    private Vector2 originalPosition; // Initial handle position
+    private Vector2 originalPosition;
 
     void Start()
     {
         originalPosition = handle.anchoredPosition; // Store the initial position of the handle
-        background.gameObject.SetActive(false);     // Hide the joystick at the start
+        canvasGroup.alpha = 0; // Hide the joystick initially
     }
 
-    void Update()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        // Check for touch input
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
+        Debug.Log(" User Touched");
+        // Show the joystick
+        canvasGroup.alpha = 1;
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                // Activate and position the joystick at the touch point
-                background.gameObject.SetActive(true);
-                background.position = touch.position;
-            }
-        }
+        // Center the joystick on the touch position
+        Vector2 touchPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform)background.parent, eventData.position, eventData.pressEventCamera, out touchPosition);
+        background.anchoredPosition = touchPosition;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         // Calculate the drag direction within the background bounds
         Vector2 position = RectTransformUtility.WorldToScreenPoint(null, background.position);
-        Vector2 radius = background.sizeDelta / 2; // Use half size as radius
+        Vector2 radius = background.sizeDelta / 2;
         inputDirection = (eventData.position - position) / radius;
 
         // Clamp the input direction to a circle
@@ -45,13 +43,13 @@ public class Joystick : MonoBehaviour, IDragHandler, IEndDragHandler
         handle.anchoredPosition = inputDirection * radius;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         // Reset the joystick
         inputDirection = Vector2.zero;
         handle.anchoredPosition = originalPosition;
 
-        // Hide the joystick background
-        background.gameObject.SetActive(false);
+        // Hide the joystick
+        canvasGroup.alpha = 0;
     }
 }
