@@ -7,12 +7,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] float speed;
     Smanager smanager;
+    public GameObject summonPrefab;
     Rigidbody rb;// Start is called before the first frame update
     void Start()
     {
+        
         smanager = FindObjectOfType<Smanager>();
         rb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
+        SummonPrefabEffect();
     }
 
     // Update is called once per frame
@@ -40,5 +43,10 @@ public class Enemy : MonoBehaviour
             smanager.DisplayScore(1);
             Destroy(gameObject);
         }
+    }
+
+    void SummonPrefabEffect()
+    {
+        Instantiate(summonPrefab,transform.position,summonPrefab.transform.rotation);
     }
 }
