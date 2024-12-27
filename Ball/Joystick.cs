@@ -27,6 +27,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IEndDragHandler
         // Move the handle accordingly
         handle.anchoredPosition = inputDirection * radius;
     }
+    // nothing
 
     public void OnEndDrag(PointerEventData eventData)
     {
