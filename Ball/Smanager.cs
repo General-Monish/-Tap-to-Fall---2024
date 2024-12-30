@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Smanager : MonoBehaviour
 {
+    public static Smanager Instance;
+     
     [SerializeField] GameObject enemeyPrefab;
     [SerializeField] GameObject powerupPrefab;
+
+    private PlayerController playerController;
     float spawnPos = 9f;
     int enemyCount;
     int waveNum=2;
@@ -15,13 +19,24 @@ public class Smanager : MonoBehaviour
     int levelCount;
     private int scoreCount=0;
     public GameObject pauseBtn;
+
+    public GameObject restartBtn;
+    public GameObject MMBtn;
     public GameObject pausePanel;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         levelCount = 0;
         pauseBtn.SetActive(true);
         pausePanel.SetActive(false);
+        MMBtn.SetActive(false);
+        restartBtn.SetActive(false);
+        playerController = GameObject.FindAnyObjectByType<PlayerController>();
     }
 
     // Update is called once per frame
@@ -35,6 +50,8 @@ public class Smanager : MonoBehaviour
             SpawnEnemyWave(waveNum);
             DisplayLevelNumber();
         }
+
+        GameOver();
     }
     // nothing
 
@@ -124,5 +141,18 @@ public class Smanager : MonoBehaviour
     public void RestartBtn()
     {
         Loader.Load(Loader.Scene.Ball);
+    }
+
+    public void SetPlayerController(PlayerController pc)
+    {
+        playerController = pc;
+    }
+    private void GameOver()
+    {
+        if (playerController.isGameOver )
+        {
+            MMBtn.SetActive(true);
+            restartBtn.SetActive(true);
+        }
     }
 }

@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 public class PlayerController : MonoBehaviour
 {
       // Reference to the Joystick script
-      public jj joystick;
+    private jj joystick;
     public float moveSpeed = 7f; // Speed for player movement
-    public GameObject focalPoint;
+    private GameObject focalPoint;
     /*public GameObject powerupIndicator;*/
     public AudioClip enemycollideSound;
     public AudioClip powerupSound;
@@ -15,38 +16,43 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     AudioSource playerAudio;
 
-    public GameObject restartBtn;
-    public GameObject MMBtn;
-
+    public bool isGameOver = false;
     public GameObject boomPrefab;
     public GameObject hitPrefab;
     public GameObject powerGlowupPrefab;
+    PhotonView view;
 
     void Start()
     {
-        MMBtn.SetActive(false);
-        restartBtn.SetActive(false);
         playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
+        focalPoint = GameObject.Find("FocalPoint");
+        joystick = GameObject.FindAnyObjectByType<jj>();
+        view = GetComponent<PhotonView>();
     }
 
     void FixedUpdate()
     {
         if (transform.position.y < -10)
         {
-            MMBtn.SetActive(true);
-            restartBtn.SetActive(true);
+            Debug.Log("plyr dead");
+           isGameOver = true;
         }
         /*powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);*/
-        powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,-0.44f,0);
+        powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,0,0);
         // Get input from the joystick
 
+        if (view.IsMine)
+        {
 
-        float horizontal = joystick.inputDirection.x;
-        float vertical = joystick.inputDirection.y;
+            float horizontal = joystick.inputDirection.x;
+            float vertical = joystick.inputDirection.y;
 
-        rb.AddForce(focalPoint.transform.right * moveSpeed * horizontal * Time.deltaTime, ForceMode.Impulse);
-        rb.AddForce(focalPoint.transform.forward * moveSpeed * vertical * Time.deltaTime, ForceMode.Impulse);
+
+            rb.AddForce(focalPoint.transform.right * moveSpeed * horizontal * Time.deltaTime, ForceMode.Impulse);
+            rb.AddForce(focalPoint.transform.forward * moveSpeed * vertical * Time.deltaTime, ForceMode.Impulse);
+        }
+
 
     }
 
@@ -56,7 +62,7 @@ public class PlayerController : MonoBehaviour
         {
             playerAudio.PlayOneShot(powerupSound);
             hasPowerUp = true;
-            /*powerupIndicator.SetActive(true);*/
+            
             powerGlowupPrefab.SetActive(true);
             Destroy(other.gameObject);
             StartCoroutine(PowerupCountdown());

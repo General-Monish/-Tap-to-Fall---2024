@@ -12,6 +12,7 @@ public static class Loader
         Ball,
         LS,
         MainMenu,
+        Lobby,
     }
 
     private static Action onloaderCallback;

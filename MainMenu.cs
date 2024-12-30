@@ -25,4 +25,9 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void Lobby()
+    {
+        Loader.Load(Loader.Scene.Lobby);
+    }
 }

@@ -15,7 +15,7 @@ public class jj : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHa
         canvas = GetComponentInParent<Canvas>();
         uiCamera = canvas.renderMode == RenderMode.ScreenSpaceCamera ? canvas.worldCamera : null;
         background.gameObject.SetActive(false); // Hide joystick initially
-    }
+    } 
 
     public void OnPointerDown(PointerEventData eventData)
     {
