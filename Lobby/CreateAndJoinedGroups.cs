@@ -70,7 +70,7 @@ public class CreateAndJoinGroups : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        feedbackText.text = "Joined the Lobby! Ready to create or join rooms.";
+        feedbackText.text = "Joined the Lobby!  Please wait....";
     }
 
     public override void OnJoinedRoom()

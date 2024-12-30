@@ -140,7 +140,7 @@ public class Smanager : MonoBehaviour
 
     public void RestartBtn()
     {
-        Loader.Load(Loader.Scene.Ball);
+        Loader.Load(Loader.Scene.BB);
     }
 
     public void SetPlayerController(PlayerController pc)

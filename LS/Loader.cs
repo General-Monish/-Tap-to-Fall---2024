@@ -9,7 +9,7 @@ public static class Loader
 
    public enum Scene
     {
-        Ball,
+        BB,
         LS,
         MainMenu,
         Lobby,

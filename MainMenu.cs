@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayBall()
     {
-        Loader.Load(Loader.Scene.Ball);
+        Loader.Load(Loader.Scene.BB);
     }
 
     public void QuitBtn()
