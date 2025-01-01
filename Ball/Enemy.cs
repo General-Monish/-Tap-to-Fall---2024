@@ -6,7 +6,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] float speed = 3.0f; // Speed of the enemy
-    private Transform playerTransform;  // Reference to the player's transform
+    private PlayerController[] playerControllers;
+    private PlayerController nearestPlayer;
     private Rigidbody rb;               // Rigidbody for enemy movement
     private Smanager smanager;          // Reference to the game manager
 
@@ -18,11 +19,7 @@ public class Enemy : MonoBehaviour
         smanager = Smanager.Instance;
 
         // Try to find the player's transform
-        PlayerController player = FindObjectOfType<PlayerController>();
-        if (player != null)
-        {
-            playerTransform = player.transform;
-        }
+       playerControllers = FindObjectsOfType<PlayerController>();
 
         // Get the Rigidbody component
         rb = GetComponent<Rigidbody>();
@@ -33,11 +30,22 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        // Move towards the player if they exist
-        if (playerTransform != null)
+        float distanceOne = Vector2.Distance(transform.position , playerControllers[0].transform.position);
+        float distanceTwo = Vector2.Distance(transform.position , playerControllers[1].transform.position);
+
+        if (distanceOne < distanceTwo)
+        {
+            nearestPlayer = playerControllers[0];
+        } else
+        {
+            nearestPlayer= playerControllers[1];
+        }
+
+        if(nearestPlayer != null)
         {
             MoveTowradsPlayer();
         }
+       
 
         // Check for game-ending conditions
         CheckOutOfBounds();
@@ -46,7 +54,7 @@ public class Enemy : MonoBehaviour
     private void MoveTowradsPlayer()
     {
 
-        Vector3 lookDir = (playerTransform.position - transform.position).normalized;
+        Vector3 lookDir = (nearestPlayer.transform.position - transform.position).normalized;
         rb.AddForce(lookDir * speed);
     }
 
@@ -57,7 +65,7 @@ public class Enemy : MonoBehaviour
         {
             if (smanager != null)
             {
-                smanager.DisplayScore(1); // Add to the score
+                smanager.DisplayScore(2); // Add to the score
             }
             Destroy(gameObject);
         }

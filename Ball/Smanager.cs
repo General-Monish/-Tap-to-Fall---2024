@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,17 +7,15 @@ using UnityEngine;
 public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
-     
-    [SerializeField] GameObject enemeyPrefab;
     [SerializeField] GameObject powerupPrefab;
 
     private PlayerController playerController;
     float spawnPos = 9f;
     int enemyCount;
-    int waveNum=2;
+    
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI scoreText;
-    int levelCount;
+    public int levelCount;
     private int scoreCount=0;
     public GameObject pauseBtn;
 
@@ -42,28 +41,16 @@ public class Smanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        enemyCount=FindObjectsOfType<Enemy>().Length;
-        if(enemyCount == 0)
-        {
-            Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
-            waveNum++;
-            SpawnEnemyWave(waveNum);
-            DisplayLevelNumber();
-        }
-
-        GameOver();
+            enemyCount = FindObjectsOfType<Enemy>().Length;
+            if (enemyCount == 0)
+            {
+                PhotonNetwork.Instantiate(powerupPrefab.name, GenerateRandomPosition(), powerupPrefab.transform.rotation);
+               
+                DisplayLevelNumber();
+            }
+            GameOver();
     }
     // nothing
-
-    void SpawnEnemyWave(int enemiesToSpawn)
-    {
-        for (int i = 0; i < enemiesToSpawn; i++)
-        {
-            Instantiate(enemeyPrefab, GenerateRandomPosition(), enemeyPrefab.transform.rotation);
-        }
-        levelCount++;
-    }
-
     private Vector3 GenerateRandomPosition()
     {
         float spawnX = Random.Range(-spawnPos, spawnPos);
