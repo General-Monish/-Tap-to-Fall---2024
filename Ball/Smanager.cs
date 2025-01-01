@@ -8,6 +8,7 @@ public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
     [SerializeField] GameObject powerupPrefab;
+    [SerializeField] GameObject enemeyPrefab;
 
     private PlayerController playerController;
     float spawnPos = 9f;
@@ -18,6 +19,8 @@ public class Smanager : MonoBehaviour
     public int levelCount;
     private int scoreCount=0;
     public GameObject pauseBtn;
+
+    int waveNum = 2;
 
     public GameObject restartBtn;
     public GameObject MMBtn;
@@ -44,11 +47,23 @@ public class Smanager : MonoBehaviour
             enemyCount = FindObjectsOfType<Enemy>().Length;
             if (enemyCount == 0)
             {
-                PhotonNetwork.Instantiate(powerupPrefab.name, GenerateRandomPosition(), powerupPrefab.transform.rotation);
-               
-                DisplayLevelNumber();
+                Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
+            waveNum++;
+            SpawnEnemyWave(waveNum);
+            DisplayLevelNumber();
             }
             GameOver();
+    }
+
+
+    void SpawnEnemyWave(int enemiesToSpawn)
+    {
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            Vector3 spawnPosition = GenerateRandomPosition();
+            Instantiate(enemeyPrefab, spawnPosition, enemeyPrefab.transform.rotation);
+        }
+        Smanager.Instance.levelCount++;
     }
     // nothing
     private Vector3 GenerateRandomPosition()
@@ -129,11 +144,11 @@ public class Smanager : MonoBehaviour
     {
         Loader.Load(Loader.Scene.BB);
     }
-
+/*
     public void SetPlayerController(PlayerController pc)
     {
         playerController = pc;
-    }
+    }*/
     private void GameOver()
     {
         if (playerController.isGameOver )

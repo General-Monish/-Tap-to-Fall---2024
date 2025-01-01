@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public GameObject boomPrefab;
     public GameObject hitPrefab;
     public GameObject powerGlowupPrefab;
-    PhotonView view;
 
     void Start()
     {
@@ -28,7 +27,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("FocalPoint");
         joystick = GameObject.FindAnyObjectByType<jj>();
-        view = GetComponent<PhotonView>();
     }
 
     void FixedUpdate()
@@ -39,11 +37,9 @@ public class PlayerController : MonoBehaviour
            isGameOver = true;
         }
         /*powerupIndicator.transform.position=transform.position+new Vector3 (0,-0.44f,0);*/
-        powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,0,0);
+        powerGlowupPrefab.transform.position=transform.position+new Vector3 (0,-.4f,0);
         // Get input from the joystick
 
-        if (view.IsMine)
-        {
 
             float horizontal = joystick.inputDirection.x;
             float vertical = joystick.inputDirection.y;
@@ -51,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce(focalPoint.transform.right * moveSpeed * horizontal * Time.deltaTime, ForceMode.Impulse);
             rb.AddForce(focalPoint.transform.forward * moveSpeed * vertical * Time.deltaTime, ForceMode.Impulse);
-        }
+
 
 
     }

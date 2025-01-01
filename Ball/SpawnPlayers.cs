@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-    public GameObject playerPrefab; // Ensure this prefab is in the Resources folder.
+   /* public GameObject playerPrefab; // Ensure this prefab is in the Resources folder.
 
     public float minX;
     public float maxX;
@@ -26,5 +26,5 @@ public class SpawnPlayers : MonoBehaviour
         {
             Smanager.Instance.SetPlayerController(playerController);
         }
-    }
+    }*/
 }
