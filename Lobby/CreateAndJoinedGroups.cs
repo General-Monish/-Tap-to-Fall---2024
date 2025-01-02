@@ -2,6 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Photon.Realtime;
 
 public class CreateAndJoinGroups : MonoBehaviourPunCallbacks
 {
@@ -29,6 +30,8 @@ public class CreateAndJoinGroups : MonoBehaviourPunCallbacks
         {
             if (!string.IsNullOrEmpty(createInput.text))
             {
+                RoomOptions roomOptions = new RoomOptions();
+                roomOptions.MaxPlayers = 2;
                 PhotonNetwork.CreateRoom(createInput.text);
                 feedbackText.text = "Creating room...";
             }

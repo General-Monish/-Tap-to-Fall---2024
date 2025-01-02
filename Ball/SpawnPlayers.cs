@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class SpawnPlayers : MonoBehaviour
 {
-   /* public GameObject playerPrefab; // Ensure this prefab is in the Resources folder.
+    public GameObject playerPrefab; // Ensure this prefab is in the Resources folder.
 
     public float minX;
     public float maxX;
@@ -15,9 +15,10 @@ public class SpawnPlayers : MonoBehaviour
     private void Start()
     {
         // Generate a random position within the specified range
-        Vector3 randomPos = new Vector3(Random.Range(minX, maxX),0, Random.Range(minY, maxY));
+        Vector3 randomPos = new Vector3(Random.Range(minX, maxX), 0, Random.Range(minY, maxY));
+        PhotonNetwork.Instantiate(playerPrefab.name, randomPos,playerPrefab.transform.rotation);
 
-        // Use PhotonNetwork.Instantiate to spawn the player and get the instance
+       /* // Use PhotonNetwork.Instantiate to spawn the player and get the instance
         GameObject spawnedPlayer = PhotonNetwork.Instantiate(playerPrefab.name, randomPos, playerPrefab.transform.rotation);
 
         // Set the player controller reference in the Smanager
@@ -25,6 +26,6 @@ public class SpawnPlayers : MonoBehaviour
         if (Smanager.Instance != null && playerController != null)
         {
             Smanager.Instance.SetPlayerController(playerController);
-        }
-    }*/
+        }*/
+    }
 }
