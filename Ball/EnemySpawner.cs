@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     public float startTimeBetweenSpawn;
     public float timeBetweenSpawn;
     float spawnPos = 9f;
-
+    public GameObject summonPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
         {
             /*Vector3 randomSpawnpointsPosition = spawnPoints[Random.Range(0, spawnPoints.Length)].position;*/
             PhotonNetwork.Instantiate(enemeyPrefab.name,GenerateRandomPosition(),enemeyPrefab.transform.rotation);
-           
+            SummonPrefabEffect();
             timeBetweenSpawn = startTimeBetweenSpawn;
         }
         else
@@ -38,7 +38,14 @@ public class EnemySpawner : MonoBehaviour
             timeBetweenSpawn -= Time.deltaTime;
         }
     }
-  
+    private void SummonPrefabEffect()
+    {
+        // Instantiate the summon effect at the enemy's position
+        if (summonPrefab != null)
+        {
+            PhotonNetwork.Instantiate(summonPrefab.name,transform.position, summonPrefab.transform.rotation);
+        }
+    }
 
     private Vector3 GenerateRandomPosition()
     {

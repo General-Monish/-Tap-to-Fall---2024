@@ -13,11 +13,11 @@ public class Smanager : MonoBehaviour
     private PlayerController playerController;
     float spawnPos = 9f;
     int enemyCount;
-    
+
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI scoreText;
     public int levelCount;
-    private int scoreCount=0;
+    private int scoreCount = 0;
     public GameObject pauseBtn;
 
     int waveNum = 2;
@@ -44,15 +44,15 @@ public class Smanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            enemyCount = FindObjectsOfType<Enemy>().Length;
-            if (enemyCount == 0)
-            {
-                Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
+        enemyCount = FindObjectsOfType<Enemy>().Length;
+        if (enemyCount == 0)
+        {
+            Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
             waveNum++;
             SpawnEnemyWave(waveNum);
             DisplayLevelNumber();
-            }
-            GameOver();
+        }
+        GameOver();
     }
 
 
@@ -76,7 +76,7 @@ public class Smanager : MonoBehaviour
 
     private void DisplayLevelNumber()
     {
-        levelText.text="Level: " + levelCount.ToString();
+        levelText.text = "Level: " + levelCount.ToString();
     }
 
     public void DisplayScore(int scorePoints)
@@ -144,14 +144,14 @@ public class Smanager : MonoBehaviour
     {
         Loader.Load(Loader.Scene.BB);
     }
-/*
-    public void SetPlayerController(PlayerController pc)
-    {
-        playerController = pc;
-    }*/
+    /*
+        public void SetPlayerController(PlayerController pc)
+        {
+            playerController = pc;
+        }*/
     private void GameOver()
     {
-        if (playerController.isGameOver )
+        if (playerController.isGameOver)
         {
             MMBtn.SetActive(true);
             restartBtn.SetActive(true);

@@ -66,9 +66,9 @@ public class Enemy : MonoBehaviour
     private void SummonPrefabEffect()
     {
         // Instantiate the summon effect at the enemy's position
-        if (summonPrefab != null)
+        if (summonPrefab != null) 
         {
             Instantiate(summonPrefab, transform.position, Quaternion.identity);
         }
-    }
+    } // noths
 }
