@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
         {
             if (smanager != null)
             {
-                smanager.DisplayScore(1); // Add to the score
+                smanager.DisplayScore(2); // Add to the score
             }
             Destroy(gameObject);
         }

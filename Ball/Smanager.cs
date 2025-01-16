@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
     [SerializeField] GameObject powerupPrefab;
     [SerializeField] GameObject enemeyPrefab;
+
+    public Slider levelProgressBar; // Reference to the slider
+    private float totalEnemiesToSpawn; // Total enemies in a wave
 
     private PlayerController playerController;
     float spawnPos = 9f;
@@ -33,6 +37,10 @@ public class Smanager : MonoBehaviour
     }
     void Start()
     {
+        // Initialize the progress bar
+        if (levelProgressBar != null)
+            levelProgressBar.value = 0f;
+
         levelCount = 0;
         pauseBtn.SetActive(true);
         pausePanel.SetActive(false);
@@ -41,32 +49,45 @@ public class Smanager : MonoBehaviour
         playerController = GameObject.FindAnyObjectByType<PlayerController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
+
         if (enemyCount == 0)
         {
             Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
             waveNum++;
+            totalEnemiesToSpawn = waveNum; // Update the total enemies count
             SpawnEnemyWave(waveNum);
             DisplayLevelNumber();
         }
+
+        UpdateLevelProgress();
         GameOver();
     }
 
+    private void UpdateLevelProgress()
+    {
+        if (levelProgressBar != null && totalEnemiesToSpawn > 0)
+        {
+            float progress = 1f - (float)enemyCount / totalEnemiesToSpawn;
+            levelProgressBar.value = progress; // Update the progress bar value
+        }
+    }
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
+        totalEnemiesToSpawn = enemiesToSpawn; // Set the new total
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             Vector3 spawnPosition = GenerateRandomPosition();
             Instantiate(enemeyPrefab, spawnPosition, enemeyPrefab.transform.rotation);
         }
-        Smanager.Instance.levelCount++;
+        levelCount++;
     }
-    // nothing
-    private Vector3 GenerateRandomPosition()
+
+// nothing
+private Vector3 GenerateRandomPosition()
     {
         float spawnX = Random.Range(-spawnPos, spawnPos);
         float spawnZ = Random.Range(-spawnPos, spawnPos);
