@@ -9,12 +9,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 7f; // Speed for player movement
     private GameObject focalPoint;
     /*public GameObject powerupIndicator;*/
-    public AudioClip enemycollideSound;
-    public AudioClip powerupSound;
+    
     bool hasPowerUp;
     float powerStrength = 20f;
     private Rigidbody rb;
-    AudioSource playerAudio;
 
     public bool isGameOver = false;
     public GameObject boomPrefab;
@@ -23,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        playerAudio = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("FocalPoint");
         joystick = GameObject.FindAnyObjectByType<jj>();
@@ -56,9 +53,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("PUP"))
         {
-            playerAudio.PlayOneShot(powerupSound);
-            hasPowerUp = true;
             
+            hasPowerUp = true;
+            SoundManager.Instance.PlayerPowerupSoundEffect();
             powerGlowupPrefab.SetActive(true);
             Destroy(other.gameObject);
             StartCoroutine(PowerupCountdown());
@@ -78,7 +75,7 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(boomPrefab, transform.position, boomPrefab.transform.rotation);
             Instantiate(hitPrefab, transform.position, hitPrefab.transform.rotation);
-            playerAudio.PlayOneShot(enemycollideSound);
+            SoundManager.Instance.CollisionSoundEffct();
             Rigidbody enemyRB=collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = collision.gameObject.transform.position - transform.position;
             enemyRB.AddForce(awayFromPlayer*powerStrength,ForceMode.Impulse);

@@ -24,7 +24,7 @@ public class Smanager : MonoBehaviour
     private int scoreCount = 0;
     public GameObject pauseBtn;
 
-    int waveNum = 2;
+    int waveNum = 5;
 
     public GameObject restartBtn;
     public GameObject MMBtn;
@@ -117,6 +117,10 @@ private Vector3 GenerateRandomPosition()
         pauseBtn.SetActive(false);
         pausePanel.SetActive(true);
 
+        // Pause audio
+        SoundManager.Instance.musicSource.Pause();
+        SoundManager.Instance.sfxSource.Pause();
+
         // Disable physics-related components
         Rigidbody[] allRigidbodies = FindObjectsOfType<Rigidbody>();
         foreach (Rigidbody rb in allRigidbodies)
@@ -126,12 +130,12 @@ private Vector3 GenerateRandomPosition()
             rb.angularVelocity = Vector3.zero;
         }
 
-        // Pause audio
+       /* // Pause audio
         AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
         foreach (AudioSource audio in allAudioSources)
         {
             audio.Pause();
-        }
+        }*/
     }
 
     public void ResumeBtn()
@@ -148,11 +152,14 @@ private Vector3 GenerateRandomPosition()
         }
 
         // Resume audio
-        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
-        foreach (AudioSource audio in allAudioSources)
-        {
-            audio.UnPause();
-        }
+        SoundManager.Instance.musicSource.UnPause();
+        SoundManager.Instance.sfxSource.UnPause();
+        /*  // Resume audio
+          AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+          foreach (AudioSource audio in allAudioSources)
+          {
+              audio.UnPause();
+          }*/
     }
 
     public void MMbtn()
