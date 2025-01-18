@@ -14,14 +14,6 @@ public class SoundManager : MonoBehaviour
     private bool isMusicMuted = false;
     private bool isSfxMuted = false;
 
-    [Header("UI Elements")]
-    [SerializeField] private Image musicToggleButton;
-    [SerializeField] private Sprite musicOnSprite;
-    [SerializeField] private Sprite musicOffSprite;
-
-    [SerializeField] private Image sfxToggleButton;
-    [SerializeField] private Sprite sfxOnSprite;
-    [SerializeField] private Sprite sfxOffSprite;
 
     private void Awake()
     {
@@ -37,69 +29,31 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Play music
-    public void PlayMusic(AudioClip clip)
-    {
-        if (!isMusicMuted)
-        {
-            musicSource.clip = clip;
-            musicSource.Play();
-        }
-    }
-
-    // Toggle music mute
-    public void ToggleMusicMute()
+    public void ToggleMusic()
     {
         isMusicMuted = !isMusicMuted;
         musicSource.mute = isMusicMuted;
-
-        // Update the music button image
-        UpdateMusicToggleButton();
     }
 
-    // Toggle sound effects mute
-    public void ToggleSFXMute()
+    public void ToggleSFX()
     {
         isSfxMuted = !isSfxMuted;
         sfxSource.mute = isSfxMuted;
-
-        // Update the sound effects button image
-        UpdateSFXToggleButton();
     }
 
-    // Updates the music button image based on mute state
-    private void UpdateMusicToggleButton()
+    public bool IsMusicMuted()
     {
-        if (isMusicMuted)
-        {
-            musicToggleButton.sprite = musicOffSprite;
-        }
-        else
-        {
-            musicToggleButton.sprite = musicOnSprite;
-        }
+        return isMusicMuted;
     }
 
-    // Updates the SFX button image based on mute state
-    private void UpdateSFXToggleButton()
+    public bool IsSfxMuted()
     {
-        if (isSfxMuted)
-        {
-            sfxToggleButton.sprite = sfxOffSprite;
-        }
-        else
-        {
-            sfxToggleButton.sprite = sfxOnSprite;
-        }
+        return isSfxMuted;
     }
 
-    // Play sound effects
-    public void PlaySFX(AudioClip clip)
+    public void StopMusic()
     {
-        if (!isSfxMuted)
-        {
-            sfxSource.PlayOneShot(clip);
-        }
+        musicSource.Stop();
     }
 
     public void PlayerPowerupSoundEffect()
