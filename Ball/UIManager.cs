@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI countdownText; // Assign your countdown text here
     public float countdownDuration = 3f; // Countdown time in seconds
     public Smanager gameManager;
+    public GameObject introImage;
 
     [SerializeField] private Button musicToggleButton;
     [SerializeField] private Button sfxToggleButton;
@@ -87,6 +88,11 @@ public class UIManager : MonoBehaviour
         if (gameManager != null)
         {
             gameManager.enabled = true; // Start the game manager logic (spawning enemies, etc.)
+        }
+
+        if (introImage != null)
+        {
+            introImage.SetActive(false); // Hide the intro image
         }
     }
 }
