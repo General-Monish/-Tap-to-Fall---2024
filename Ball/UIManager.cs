@@ -1,8 +1,14 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
+    public TextMeshProUGUI countdownText; // Assign your countdown text here
+    public float countdownDuration = 3f; // Countdown time in seconds
+    public Smanager gameManager;
+
     [SerializeField] private Button musicToggleButton;
     [SerializeField] private Button sfxToggleButton;
 
@@ -13,6 +19,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(CountdownRoutine());
         // Initialize UI state
         UpdateMusicButton();
         UpdateSfxButton();
@@ -55,6 +62,31 @@ public class UIManager : MonoBehaviour
         else
         {
             sfxToggleButton.image.sprite = sfxOnSprite;
+        }
+    }
+
+    private IEnumerator CountdownRoutine()
+    {
+        countdownText.gameObject.SetActive(true); // Show the countdown text
+
+        for (int i = (int)countdownDuration; i > 0; i--)
+        {
+            countdownText.text = i.ToString(); // Display the countdown number
+            yield return new WaitForSeconds(1f); // Wait for 1 second
+        }
+
+        countdownText.gameObject.SetActive(false); // Hide the countdown text
+        StartGame(); // Call the game-start logic
+    }
+
+    void StartGame()
+    {
+        Debug.Log("Game Started!");
+        // Add your game start logic here
+
+        if (gameManager != null)
+        {
+            gameManager.enabled = true; // Start the game manager logic (spawning enemies, etc.)
         }
     }
 }
