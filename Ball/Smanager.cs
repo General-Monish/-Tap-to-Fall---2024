@@ -8,24 +8,18 @@ using UnityEngine.UI;
 public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
+
     [SerializeField] GameObject powerupPrefab;
     [SerializeField] GameObject enemeyPrefab;
 
-    public Slider levelProgressBar; // Reference to the slider
-    private float totalEnemiesToSpawn; // Total enemies in a wave
 
+    public float totalEnemiesToSpawn; // Total enemies in a wave
     private PlayerController playerController;
     float spawnPos = 9f;
-    int enemyCount;
+    public int enemyCount;
+    public int waveNum = 5;
 
-    public TextMeshProUGUI levelText;
-    public TextMeshProUGUI scoreText;
-    public int levelCount;
-    private int scoreCount = 0;
     public GameObject pauseBtn;
-
-    int waveNum = 5;
-
     public GameObject restartBtn;
     public GameObject MMBtn;
     public GameObject pausePanel;
@@ -37,11 +31,6 @@ public class Smanager : MonoBehaviour
     }
     void Start()
     {
-        // Initialize the progress bar
-        if (levelProgressBar != null)
-            levelProgressBar.value = 0f;
-
-        levelCount = 0;
         pauseBtn.SetActive(true);
         pausePanel.SetActive(false);
         MMBtn.SetActive(false);
@@ -52,27 +41,28 @@ public class Smanager : MonoBehaviour
     void Update()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
-
         if (enemyCount == 0)
         {
-            Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
-            waveNum++;
-            totalEnemiesToSpawn = waveNum; // Update the total enemies count
-            SpawnEnemyWave(waveNum);
-            DisplayLevelNumber();
-        }
+            
+            if (waveNum < 14) // level 10 set wavenum < 14
+            {
+                Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
+                waveNum++;
+                totalEnemiesToSpawn = waveNum; // Update the total enemies count
+                SpawnEnemyWave(waveNum);
+                UIManager.instance.DisplayLevelNumber();
+            }
+            else
+            {
+                Debug.Log("Boss Enemy Spawned");
+                UIManager.instance.levelProgressBar.gameObject.SetActive(false);
+                UIManager.instance.levelText.gameObject.SetActive(false);
+                UIManager.instance.scoreText.gameObject.SetActive(false);
+            }
 
-        UpdateLevelProgress();
+        }
+        UIManager.instance.UpdateLevelProgress();
         GameOver();
-    }
-
-    private void UpdateLevelProgress()
-    {
-        if (levelProgressBar != null && totalEnemiesToSpawn > 0)
-        {
-            float progress = 1f - (float)enemyCount / totalEnemiesToSpawn;
-            levelProgressBar.value = progress; // Update the progress bar value
-        }
     }
 
     void SpawnEnemyWave(int enemiesToSpawn)
@@ -83,32 +73,15 @@ public class Smanager : MonoBehaviour
             Vector3 spawnPosition = GenerateRandomPosition();
             Instantiate(enemeyPrefab, spawnPosition, enemeyPrefab.transform.rotation);
         }
-        levelCount++;
+        UIManager.instance.levelCount++;
     }
 
-// nothing
-private Vector3 GenerateRandomPosition()
+    private Vector3 GenerateRandomPosition()
     {
         float spawnX = Random.Range(-spawnPos, spawnPos);
         float spawnZ = Random.Range(-spawnPos, spawnPos);
         Vector3 randomPos = new Vector3(spawnX, 0, spawnZ);
         return randomPos;
-    }
-
-    private void DisplayLevelNumber()
-    {
-        levelText.text = "Level: " + levelCount.ToString();
-    }
-
-    public void DisplayScore(int scorePoints)
-    {
-        scoreCount += scorePoints;
-        UpdateScoreUI();
-    }
-
-    private void UpdateScoreUI()
-    {
-        scoreText.text = "Score: " + scoreCount.ToString(); // Assume scoreText is a UI Text element
     }
 
     public void PauseBtn()
@@ -130,12 +103,12 @@ private Vector3 GenerateRandomPosition()
             rb.angularVelocity = Vector3.zero;
         }
 
-       /* // Pause audio
-        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
-        foreach (AudioSource audio in allAudioSources)
-        {
-            audio.Pause();
-        }*/
+        /* // Pause audio
+         AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+         foreach (AudioSource audio in allAudioSources)
+         {
+             audio.Pause();
+         }*/
     }
 
     public void ResumeBtn()
