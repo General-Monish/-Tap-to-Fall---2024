@@ -19,10 +19,6 @@ public class Smanager : MonoBehaviour
     public int enemyCount;
     public int waveNum = 5;
 
-    public GameObject pauseBtn;
-    public GameObject restartBtn;
-    public GameObject MMBtn;
-    public GameObject pausePanel;
     // Start is called before the first frame update
 
     private void Awake()
@@ -31,10 +27,7 @@ public class Smanager : MonoBehaviour
     }
     void Start()
     {
-        pauseBtn.SetActive(true);
-        pausePanel.SetActive(false);
-        MMBtn.SetActive(false);
-        restartBtn.SetActive(false);
+
         playerController = GameObject.FindAnyObjectByType<PlayerController>();
     }
 
@@ -43,7 +36,7 @@ public class Smanager : MonoBehaviour
         enemyCount = FindObjectsOfType<Enemy>().Length;
         if (enemyCount == 0)
         {
-            
+
             if (waveNum < 14) // level 10 set wavenum < 14
             {
                 Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
@@ -59,7 +52,6 @@ public class Smanager : MonoBehaviour
                 UIManager.instance.levelText.gameObject.SetActive(false);
                 UIManager.instance.scoreText.gameObject.SetActive(false);
             }
-
         }
         UIManager.instance.UpdateLevelProgress();
         GameOver();
@@ -84,67 +76,6 @@ public class Smanager : MonoBehaviour
         return randomPos;
     }
 
-    public void PauseBtn()
-    {
-        Time.timeScale = 0.0f;
-        pauseBtn.SetActive(false);
-        pausePanel.SetActive(true);
-
-        // Pause audio
-        SoundManager.Instance.musicSource.Pause();
-        SoundManager.Instance.sfxSource.Pause();
-
-        // Disable physics-related components
-        Rigidbody[] allRigidbodies = FindObjectsOfType<Rigidbody>();
-        foreach (Rigidbody rb in allRigidbodies)
-        {
-            rb.isKinematic = true;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        /* // Pause audio
-         AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
-         foreach (AudioSource audio in allAudioSources)
-         {
-             audio.Pause();
-         }*/
-    }
-
-    public void ResumeBtn()
-    {
-        Time.timeScale = 1.0f;
-        pausePanel.SetActive(false);
-        pauseBtn.SetActive(true);
-
-        // Enable physics-related components
-        Rigidbody[] allRigidbodies = FindObjectsOfType<Rigidbody>();
-        foreach (Rigidbody rb in allRigidbodies)
-        {
-            rb.isKinematic = false;
-        }
-
-        // Resume audio
-        SoundManager.Instance.musicSource.UnPause();
-        SoundManager.Instance.sfxSource.UnPause();
-        /*  // Resume audio
-          AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
-          foreach (AudioSource audio in allAudioSources)
-          {
-              audio.UnPause();
-          }*/
-    }
-
-    public void MMbtn()
-    {
-        Loader.Load(Loader.Scene.MainMenu);
-        Time.timeScale = 1.0f;
-    }
-
-    public void RestartBtn()
-    {
-        Loader.Load(Loader.Scene.BB);
-    }
     /*
         public void SetPlayerController(PlayerController pc)
         {
@@ -154,8 +85,8 @@ public class Smanager : MonoBehaviour
     {
         if (playerController.isGameOver)
         {
-            MMBtn.SetActive(true);
-            restartBtn.SetActive(true);
+            UIManager.instance.MMBtn.SetActive(true);
+            UIManager.instance.restartBtn.SetActive(true);
         }
     }
 }
