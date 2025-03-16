@@ -8,13 +8,16 @@ using UnityEngine.UI;
 public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
+    private PlayerController playerController;
+    private BossSpawner bossSpawner;
+
 
     [SerializeField] GameObject powerupPrefab;
     [SerializeField] GameObject enemeyPrefab;
+    
 
 
     public float totalEnemiesToSpawn; // Total enemies in a wave
-    private PlayerController playerController;
     float spawnPos = 9f;
     public int enemyCount;
     public int waveNum = 5;
@@ -27,7 +30,7 @@ public class Smanager : MonoBehaviour
     }
     void Start()
     {
-
+        bossSpawner = GameObject.FindAnyObjectByType<BossSpawner>();
         playerController = GameObject.FindAnyObjectByType<PlayerController>();
     }
 
@@ -37,7 +40,7 @@ public class Smanager : MonoBehaviour
         if (enemyCount == 0)
         {
 
-            if (waveNum < 14) // level 10 set wavenum < 14
+            if (waveNum < 5) // level 10 set wavenum < 14
             {
                 Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
                 waveNum++;
@@ -47,10 +50,9 @@ public class Smanager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Boss Enemy Spawned");
-                UIManager.instance.levelProgressBar.gameObject.SetActive(false);
-                UIManager.instance.levelText.gameObject.SetActive(false);
-                UIManager.instance.scoreText.gameObject.SetActive(false);
+                // BOSS CODE
+                
+                
             }
         }
         UIManager.instance.UpdateLevelProgress();
