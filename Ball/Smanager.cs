@@ -9,50 +9,45 @@ public class Smanager : MonoBehaviour
 {
     public static Smanager Instance;
     private PlayerController playerController;
-    private BossSpawner bossSpawner;
-
 
     [SerializeField] GameObject powerupPrefab;
     [SerializeField] GameObject enemeyPrefab;
-    
-
+    [SerializeField] GameObject bossPrefab; // Add boss reference
 
     public float totalEnemiesToSpawn; // Total enemies in a wave
     float spawnPos = 9f;
     public int enemyCount;
     public int waveNum = 5;
-
-    // Start is called before the first frame update
+    private bool bossSpawned = false; // Track if boss has been spawned
 
     private void Awake()
     {
         Instance = this;
     }
+
     void Start()
     {
-        bossSpawner = GameObject.FindAnyObjectByType<BossSpawner>();
         playerController = GameObject.FindAnyObjectByType<PlayerController>();
     }
 
     void Update()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
+
         if (enemyCount == 0)
         {
-
-            if (waveNum < 5) // level 10 set wavenum < 14
+            if (waveNum < 14) // Before final wave, continue normal waves , level 10 set wave < 14
             {
                 Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
                 waveNum++;
-                totalEnemiesToSpawn = waveNum; // Update the total enemies count
+                totalEnemiesToSpawn = waveNum;
                 SpawnEnemyWave(waveNum);
                 UIManager.instance.DisplayLevelNumber();
             }
-            else
+            else if (!bossSpawned) // Final wave - spawn boss
             {
-                // BOSS CODE
-                
-                
+                SpawnBoss();
+                bossSpawned = true;
             }
         }
         UIManager.instance.UpdateLevelProgress();
@@ -61,7 +56,7 @@ public class Smanager : MonoBehaviour
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
-        totalEnemiesToSpawn = enemiesToSpawn; // Set the new total
+        totalEnemiesToSpawn = enemiesToSpawn;
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             Vector3 spawnPosition = GenerateRandomPosition();
@@ -78,11 +73,13 @@ public class Smanager : MonoBehaviour
         return randomPos;
     }
 
-    /*
-        public void SetPlayerController(PlayerController pc)
-        {
-            playerController = pc;
-        }*/
+    private void SpawnBoss()
+    {
+        Vector3 bossSpawnPosition = new Vector3(0, 1, 0); // Adjust position as needed
+        Instantiate(bossPrefab, bossSpawnPosition, Quaternion.identity);
+        Debug.Log("Boss Spawned!");
+    }
+
     private void GameOver()
     {
         if (playerController.isGameOver)
