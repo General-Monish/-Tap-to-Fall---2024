@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,7 +18,7 @@ public class Smanager : MonoBehaviour
     float spawnPos = 9f;
     public int enemyCount;
     public int waveNum = 5;
-    private bool bossSpawned = false; // Track if boss has been spawned
+    public bool bossSpawned = false; // Track if boss has been spawned
 
     private void Awake()
     {
@@ -36,7 +36,7 @@ public class Smanager : MonoBehaviour
 
         if (enemyCount == 0)
         {
-            if (waveNum < 14) // Before final wave, continue normal waves , level 10 set wave < 14
+            if (waveNum < 5)
             {
                 Instantiate(powerupPrefab, GenerateRandomPosition(), powerupPrefab.transform.rotation);
                 waveNum++;
@@ -44,14 +44,36 @@ public class Smanager : MonoBehaviour
                 SpawnEnemyWave(waveNum);
                 UIManager.instance.DisplayLevelNumber();
             }
-            else if (!bossSpawned) // Final wave - spawn boss
+            else if (!bossSpawned)
             {
-                SpawnBoss();
-                bossSpawned = true;
+                if (BossIntroUI.instance == null)
+                {
+                    BossIntroUI.instance = FindObjectOfType<BossIntroUI>(true); // 👈 Find even if inactive
+                }
+
+                if (BossIntroUI.instance != null)
+                {
+                    BossIntroUI.instance.gameObject.SetActive(true); // 👈 Activate before calling
+                    BossIntroUI.instance.ShowBossIntro();
+                    Time.timeScale = 0;
+                    bossSpawned = true;
+                    UIManager.instance.StartBossTimer();
+                }
+                else
+                {
+                    Debug.LogError("BossIntroUI is missing or not assigned!");
+                }
             }
         }
         UIManager.instance.UpdateLevelProgress();
         GameOver();
+    }
+
+
+    public void OnBossIntroComplete() // Call this when player clicks "Continue"
+    {
+        Time.timeScale = 1; // Resume game
+        SpawnBoss();
     }
 
     void SpawnEnemyWave(int enemiesToSpawn)

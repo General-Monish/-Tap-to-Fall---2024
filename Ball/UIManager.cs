@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Button musicToggleButton;
     [SerializeField] private Button sfxToggleButton;
+    [SerializeField] private Button bossIntroButton;
 
     [SerializeField] private Sprite musicOnSprite;
     [SerializeField] private Sprite musicOffSprite;
@@ -20,9 +21,14 @@ public class UIManager : MonoBehaviour
     public GameObject restartBtn;
     public GameObject MMBtn;
     public GameObject pausePanel;
+    public GameObject bossIntroPanel;
     public GameObject introImage;
 
     public Slider levelProgressBar; // Reference to the slider
+    public Slider bossTimerBar; // Reference to the boss timer bar
+
+    public float bossFightDuration = 300f; // Set the boss timer duration (30 seconds)
+    private Coroutine bossTimerCoroutine;
 
     public TextMeshProUGUI countdownText; // Assign your countdown text here
     public TextMeshProUGUI levelText;
@@ -53,9 +59,51 @@ public class UIManager : MonoBehaviour
             levelProgressBar.value = 0f;
         levelCount = 0;
 
+        if (bossTimerBar != null)
+        {
+            bossTimerBar.maxValue = bossFightDuration;
+            bossTimerBar.value = bossFightDuration;
+        }
+
         // Assign button click listeners
         musicToggleButton.onClick.AddListener(OnMusicToggle);
         sfxToggleButton.onClick.AddListener(OnSfxToggle);
+
+       
+    }
+
+    private void Update()
+    {
+        DisableHealthBarUI();
+    }
+
+    public void StartBossTimer()
+    {
+        if (bossTimerCoroutine != null)
+            StopCoroutine(bossTimerCoroutine); // Stop any existing timer
+
+        bossTimerCoroutine = StartCoroutine(BossTimerRoutine());
+    }
+
+    private IEnumerator BossTimerRoutine()
+    {
+        float timeRemaining = bossFightDuration;
+
+        while (timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+            bossTimerBar.value = timeRemaining; // Update the timer bar
+            yield return null;
+        }
+
+        bossTimerBar.value = 0;
+        BossFightWon(); // Call win condition
+    }
+
+    private void BossFightWon()
+    {
+        Debug.Log("Player Wins! Boss Timer Ended.");
+        // Implement win screen, rewards, or transition logic here
     }
 
     public void UpdateLevelProgress()
@@ -133,7 +181,7 @@ public class UIManager : MonoBehaviour
         StartGame(); // Call the game-start logic
     }
 
-    void StartGame()
+   public void StartGame()
     {
         Debug.Log("Game Started!");
         // Add your game start logic here
@@ -210,5 +258,29 @@ public class UIManager : MonoBehaviour
     public void RestartBtn()
     {
         Loader.Load(Loader.Scene.BB);
+    }
+
+    public void ShowBossIntro()
+    {
+        bossIntroPanel.SetActive(true);
+    }
+
+    public void HideBossIntro()
+    {
+        bossIntroPanel.SetActive(false);
+        Time.timeScale = 1f; // Resume game
+        
+    }
+
+
+    void DisableHealthBarUI()
+    {
+        if(Smanager.Instance.bossSpawned)
+        {
+            levelProgressBar.gameObject.SetActive(false);
+            scoreText.gameObject.SetActive(false);
+            levelText.gameObject.SetActive(false);
+        }
+        
     }
 }

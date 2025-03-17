@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class BossController : MonoBehaviour
@@ -24,6 +24,7 @@ public class BossController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         InvokeRepeating("Jump", 2f, jumpInterval);
+        SoundManager.Instance.PlaySpawnMusic();
     }
 
     private void Update()

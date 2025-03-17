@@ -10,7 +10,9 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] AudioClip powerupSound;
     [SerializeField] AudioClip enemycollideSound;
-
+    [SerializeField] AudioClip bossSpaningMusic;
+   
+    private AudioClip bgMusic;
     private bool isMusicMuted = false;
     private bool isSfxMuted = false;
 
@@ -64,5 +66,25 @@ public class SoundManager : MonoBehaviour
     public void CollisionSoundEffct()
     {
         sfxSource.PlayOneShot(enemycollideSound);
+    }
+
+    public void PlaySpawnMusic()
+    {
+        if (!isMusicMuted && bossSpaningMusic != null)
+        {
+            musicSource.clip = bossSpaningMusic;
+            musicSource.Play();
+        }
+    }
+
+
+    public void PlayBossMusic()
+    {
+        if (!isMusicMuted)
+        {
+            bgMusic = musicSource.clip; // Store the current background music
+            musicSource.Pause(); // Pause background music
+            musicSource.Play();  // Play boss music (already assigned)
+        }
     }
 }
